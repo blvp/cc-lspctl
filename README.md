@@ -74,6 +74,8 @@ Or install all at once:
 | `/lsp-install:sync` | Generate marketplace from config |
 | `/lsp-install:install <server>` | Install binary + plugin for a server |
 | `/lsp-install:install-all` | Install all configured servers |
+| `/lsp-install:uninstall <server>` | Uninstall server plugin and optionally binary |
+| `/lsp-install:uninstall --all` | Remove all plugins and deregister marketplace |
 
 ## Configuration
 

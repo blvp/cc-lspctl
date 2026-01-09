@@ -194,6 +194,145 @@ def update_settings(settings_path: Path, marketplace_path: Path) -> None:
     save_json(settings_path, settings)
 
 
+def remove_from_marketplace(
+    server_name: str,
+    registry: dict,
+    output_dir: Path
+) -> dict:
+    """
+    Remove a single server from existing marketplace.
+
+    Returns dict with:
+        - removed: plugin name that was removed (or None)
+        - binary_uninstall_commands: dict of uninstall commands
+        - remaining_plugins: list of remaining plugin names
+        - marketplace_empty: bool if no plugins remain
+    """
+    result = {
+        "removed": None,
+        "binary_uninstall_commands": {},
+        "remaining_plugins": [],
+        "marketplace_empty": False,
+        "error": None
+    }
+
+    # Check if marketplace exists
+    marketplace_json_path = output_dir / ".claude-plugin" / "marketplace.json"
+    if not marketplace_json_path.exists():
+        result["error"] = f"Marketplace not found at {output_dir}"
+        return result
+
+    # Check if server is in registry
+    if server_name not in registry:
+        result["error"] = f"Unknown server: {server_name}"
+        return result
+
+    registry_entry = registry[server_name]
+    plugin_name = registry_entry["pluginName"]
+
+    # Load marketplace.json
+    marketplace = load_json(marketplace_json_path)
+
+    # Find and remove plugin
+    plugins = marketplace.get("plugins", [])
+    plugin_found = False
+    updated_plugins = []
+
+    for plugin in plugins:
+        if plugin["name"] == plugin_name:
+            plugin_found = True
+        else:
+            updated_plugins.append(plugin)
+            result["remaining_plugins"].append(plugin["name"])
+
+    if not plugin_found:
+        result["error"] = f"Plugin '{plugin_name}' not found in marketplace"
+        return result
+
+    # Remove plugin directory
+    plugin_dir = output_dir / "plugins" / plugin_name
+    if plugin_dir.exists():
+        shutil.rmtree(plugin_dir)
+
+    # Update marketplace.json
+    marketplace["plugins"] = updated_plugins
+    save_json(marketplace_json_path, marketplace)
+
+    result["removed"] = plugin_name
+    result["binary_uninstall_commands"] = registry_entry.get("installCommands", {})
+    result["marketplace_empty"] = len(updated_plugins) == 0
+
+    return result
+
+
+def remove_settings_marketplace(settings_path: Path) -> bool:
+    """Remove generated-lsp marketplace from settings.json."""
+    if not settings_path.exists():
+        return False
+
+    try:
+        settings = load_json(settings_path)
+    except json.JSONDecodeError:
+        return False
+
+    if "extraKnownMarketplaces" not in settings:
+        return False
+
+    if "generated-lsp" not in settings["extraKnownMarketplaces"]:
+        return False
+
+    del settings["extraKnownMarketplaces"]["generated-lsp"]
+
+    # Clean up empty extraKnownMarketplaces
+    if not settings["extraKnownMarketplaces"]:
+        del settings["extraKnownMarketplaces"]
+
+    save_json(settings_path, settings)
+    return True
+
+
+def deregister_marketplace(
+    output_dir: Path,
+    settings_path: Path | None = None,
+    delete_files: bool = True
+) -> dict:
+    """
+    Deregister and optionally delete the marketplace.
+
+    Returns dict with:
+        - deregistered: bool if settings were updated
+        - plugins_removed: list of plugins that were in marketplace
+        - files_deleted: bool if directory was deleted
+        - error: error message if any
+    """
+    result = {
+        "deregistered": False,
+        "plugins_removed": [],
+        "files_deleted": False,
+        "error": None
+    }
+
+    # Get list of plugins before deletion
+    marketplace_json_path = output_dir / ".claude-plugin" / "marketplace.json"
+    if marketplace_json_path.exists():
+        try:
+            marketplace = load_json(marketplace_json_path)
+            result["plugins_removed"] = [p["name"] for p in marketplace.get("plugins", [])]
+        except json.JSONDecodeError:
+            pass
+
+    # Remove from settings
+    if settings_path:
+        result["deregistered"] = remove_settings_marketplace(settings_path)
+
+    # Delete marketplace directory
+    if delete_files and output_dir.exists():
+        shutil.rmtree(output_dir)
+        result["files_deleted"] = True
+
+    return result
+
+
 def get_scope_paths(scope: str) -> tuple[Path, Path]:
     """Get output and settings paths based on scope."""
     home = Path.home()
@@ -221,13 +360,11 @@ def main():
     parser.add_argument(
         "--config",
         type=Path,
-        required=True,
         help="Path to parsed config JSON file"
     )
     parser.add_argument(
         "--registry",
         type=Path,
-        required=True,
         help="Path to server registry JSON"
     )
     parser.add_argument(
@@ -250,6 +387,17 @@ def main():
         action="store_true",
         help="Output result as JSON"
     )
+    parser.add_argument(
+        "--remove",
+        type=str,
+        metavar="SERVER",
+        help="Remove a server from the marketplace"
+    )
+    parser.add_argument(
+        "--deregister",
+        action="store_true",
+        help="Deregister and remove the entire marketplace"
+    )
 
     args = parser.parse_args()
 
@@ -259,10 +407,71 @@ def main():
         output_dir = args.output or scope_output
         settings_path = args.settings or scope_settings
     else:
-        if not args.output:
-            parser.error("--output is required when --scope is not specified")
         output_dir = args.output
         settings_path = args.settings
+
+    # Handle --deregister mode
+    if args.deregister:
+        if not output_dir:
+            parser.error("--output or --scope is required for --deregister")
+
+        result = deregister_marketplace(output_dir, settings_path, delete_files=True)
+        result["marketplace_path"] = str(output_dir)
+
+        if args.json_output:
+            print(json.dumps(result, indent=2))
+        else:
+            if result["files_deleted"]:
+                print(f"Marketplace deleted: {output_dir}")
+            if result["deregistered"]:
+                print(f"Marketplace removed from settings: {settings_path}")
+            if result["plugins_removed"]:
+                print(f"\nPlugins removed:")
+                for plugin in result["plugins_removed"]:
+                    print(f"  - {plugin}")
+            print("\n** RELOAD Claude Code for changes to take effect **")
+        return
+
+    # Handle --remove mode
+    if args.remove:
+        if not output_dir:
+            parser.error("--output or --scope is required for --remove")
+        if not args.registry:
+            parser.error("--registry is required for --remove")
+
+        registry = load_json(args.registry)
+        result = remove_from_marketplace(args.remove, registry, output_dir)
+        result["marketplace_path"] = str(output_dir)
+
+        if args.json_output:
+            print(json.dumps(result, indent=2))
+        else:
+            if result["error"]:
+                print(f"Error: {result['error']}", file=sys.stderr)
+                sys.exit(1)
+            else:
+                print(f"Removed plugin: {result['removed']}")
+                if result["remaining_plugins"]:
+                    print(f"\nRemaining plugins:")
+                    for plugin in result["remaining_plugins"]:
+                        print(f"  - {plugin}")
+                if result["marketplace_empty"]:
+                    print("\n** Warning: Marketplace is now empty **")
+                    print("   Consider running --deregister to clean up")
+                if result["binary_uninstall_commands"]:
+                    print(f"\nTo uninstall the binary, run one of:")
+                    for method, cmd in result["binary_uninstall_commands"].items():
+                        print(f"  {method}: {cmd}")
+                print("\n** Run 'claude plugin uninstall <plugin>@generated-lsp' to remove from Claude Code **")
+        return
+
+    # Default: Generate marketplace
+    if not args.config:
+        parser.error("--config is required for marketplace generation")
+    if not args.registry:
+        parser.error("--registry is required for marketplace generation")
+    if not output_dir:
+        parser.error("--output or --scope is required")
 
     # Load inputs
     config = load_json(args.config)

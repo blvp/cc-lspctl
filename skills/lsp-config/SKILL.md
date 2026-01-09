@@ -81,6 +81,8 @@ Or install all:
 | `/lsp-install:sync` | Generate marketplace from config |
 | `/lsp-install:install <server>` | Install specific server |
 | `/lsp-install:install-all` | Install all configured servers |
+| `/lsp-install:uninstall <server>` | Uninstall server plugin |
+| `/lsp-install:uninstall --all` | Remove all and deregister marketplace |
 
 ## Supported LSP Servers
 

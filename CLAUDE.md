@@ -19,6 +19,7 @@
 - [ ] Add SessionStart hook for missing binary warnings
 - [ ] Test with real LSP servers in Claude Code
 - [ ] Add support for importing Neovim config directly
+- [ ] Add `--keep-binary` flag support in uninstall command
 
 
 ## Project Overview
@@ -104,6 +105,8 @@ claude-lsp-install/
 | `/lsp-install:list` | Show available servers and their status |
 | `/lsp-install:install <server>` | Install binary + plugin for a server |
 | `/lsp-install:install-all` | Install all configured servers |
+| `/lsp-install:uninstall <server>` | Uninstall server plugin and optionally binary |
+| `/lsp-install:uninstall --all` | Remove all plugins and deregister marketplace |
 
 
 ## User Flow
