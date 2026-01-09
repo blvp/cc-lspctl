@@ -1,11 +1,11 @@
 {
-  "name": "lsp-install",
-  "description": "Mason-like LSP server management for Claude Code. Parse Neovim/Mason configs and generate Claude Code LSP marketplace.",
+  "name": "lspctl",
+  "description": "Mason-like LSP server manager for Claude Code. Define servers in Neovim-compatible Lua config, auto-generate Claude Code LSP plugins.",
   "version": "1.0.0",
   "author": {
     "name": "Pavel Borobov",
     "email": "pborobov@provectus.com"
   },
-  "keywords": ["lsp", "language-server", "mason", "neovim", "development"],
-  "repository": "https://github.com/blvp/claude-lsp-install"
+  "keywords": ["lsp", "language-server", "mason", "neovim", "claude-code", "developer-tools"],
+  "repository": "https://github.com/blvp/cc-lspctl"
 }

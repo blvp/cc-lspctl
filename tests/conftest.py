@@ -1,4 +1,4 @@
-"""Shared pytest fixtures for lsp-install tests."""
+"""Shared pytest fixtures for lspctl tests."""
 
 import json
 import shutil
@@ -44,7 +44,7 @@ def marketplace_generator(project_root) -> Path:
 @pytest.fixture
 def temp_dir():
     """Create a temporary directory for test outputs."""
-    temp = tempfile.mkdtemp(prefix="lsp-install-test-")
+    temp = tempfile.mkdtemp(prefix="lspctl-test-")
     yield Path(temp)
     shutil.rmtree(temp, ignore_errors=True)
 

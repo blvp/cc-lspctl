@@ -4,7 +4,7 @@ argument-hint: <server-name> | --all [--keep-binary] [--scope user|project|local
 allowed-tools: [Bash, Read, Write, AskUserQuestion]
 ---
 
-# LSP Install: Uninstall Server
+# lspctl: Uninstall Server
 
 Uninstall an LSP server plugin from Claude Code and optionally remove its binary.
 
@@ -19,7 +19,7 @@ $ARGUMENTS
 
 ## Mode 1: Uninstall Single Server
 
-Usage: `/lsp-install:uninstall <server-name>`
+Usage: `/lspctl:uninstall <server-name>`
 
 ### Process
 
@@ -51,7 +51,7 @@ Usage: `/lsp-install:uninstall <server-name>`
    - If user wants to uninstall, show the commands to run
 
 7. **Check if marketplace is empty**:
-   - If yes, suggest running `/lsp-install:uninstall --all` to clean up
+   - If yes, suggest running `/lspctl:uninstall --all` to clean up
 
 8. **Report results**:
    - Plugin uninstalled
@@ -60,7 +60,7 @@ Usage: `/lsp-install:uninstall <server-name>`
 
 ## Mode 2: Uninstall All (Full Cleanup)
 
-Usage: `/lsp-install:uninstall --all`
+Usage: `/lspctl:uninstall --all`
 
 ### Process
 
@@ -115,12 +115,12 @@ From the registry, these servers can be uninstalled:
 
 ```
 # Uninstall single server
-/lsp-install:uninstall pylsp
-/lsp-install:uninstall ts_ls --keep-binary
+/lspctl:uninstall pylsp
+/lspctl:uninstall ts_ls --keep-binary
 
 # Remove everything
-/lsp-install:uninstall --all
-/lsp-install:uninstall --all --scope user
+/lspctl:uninstall --all
+/lspctl:uninstall --all --scope user
 ```
 
 ## Notes
@@ -128,4 +128,4 @@ From the registry, these servers can be uninstalled:
 - Uninstalling a plugin does NOT automatically remove the binary
 - Binaries are managed by your system's package manager
 - After uninstall, reload Claude Code for changes to take effect
-- You can re-add servers later by editing lsp-config.lua and running `/lsp-install:sync`
+- You can re-add servers later by editing lsp-config.lua and running `/lspctl:sync`

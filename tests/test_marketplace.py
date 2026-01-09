@@ -180,7 +180,7 @@ class TestMarketplaceStructure:
 
         assert marketplace["name"] == "generated-lsp"
         assert "owner" in marketplace
-        assert marketplace["owner"]["name"] == "lsp-install"
+        assert marketplace["owner"]["name"] == "lspctl"
         assert "metadata" in marketplace
         assert marketplace["metadata"]["pluginRoot"] == "./plugins"
         assert "plugins" in marketplace

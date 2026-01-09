@@ -1,4 +1,4 @@
-# Claude Code LSP Install Plugin
+# cc-lspctl - Claude Code LSP Controller
 
 ## Project Status Summary
 
@@ -36,7 +36,7 @@ User Config (lsp-config.lua)
          │
          ▼
 ┌─────────────────────┐
-│  /lsp-install:sync  │
+│  /lspctl:sync  │
 └─────────────────────┘
          │
          ▼
@@ -75,7 +75,7 @@ User Config (lsp-config.lua)
 ## File Structure
 
 ```
-claude-lsp-install/
+cc-lspctl/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin manifest
 ├── commands/
@@ -101,12 +101,12 @@ claude-lsp-install/
 
 | Command | Description |
 |---------|-------------|
-| `/lsp-install:sync` | Generate marketplace, register it, install all plugins |
-| `/lsp-install:list` | Show available servers and their status |
-| `/lsp-install:install <server>` | Install binary + plugin for a server |
-| `/lsp-install:install-all` | Install all configured servers |
-| `/lsp-install:uninstall <server>` | Uninstall server plugin and optionally binary |
-| `/lsp-install:uninstall --all` | Remove all plugins and deregister marketplace |
+| `/lspctl:sync` | Generate marketplace, register it, install all plugins |
+| `/lspctl:list` | Show available servers and their status |
+| `/lspctl:install <server>` | Install binary + plugin for a server |
+| `/lspctl:install-all` | Install all configured servers |
+| `/lspctl:uninstall <server>` | Uninstall server plugin and optionally binary |
+| `/lspctl:uninstall --all` | Remove all plugins and deregister marketplace |
 
 
 ## User Flow
@@ -114,13 +114,13 @@ claude-lsp-install/
 ### Quick Start
 ```
 1. Create ~/.claude/lsp-config.lua
-2. Run /lsp-install:sync
+2. Run /lspctl:sync
 3. Reload Claude Code
 ```
 
 ### Detailed Flow
 1. User creates `~/.claude/lsp-config.lua` (or `.claude/lsp-config.lua` in project)
-2. User runs `/lsp-install:sync`
+2. User runs `/lspctl:sync`
 3. Plugin parses Lua config → JSON
 4. Plugin generates marketplace at `~/.claude/generated-lsp-marketplace/`
 5. Plugin runs `claude plugin marketplace add <path>`
@@ -195,7 +195,7 @@ Located at `registry/servers.json`. Maps lspconfig names to Claude Code LSP form
 
 ## Generated Marketplace Structure
 
-When `/lsp-install:sync` runs, it creates:
+When `/lspctl:sync` runs, it creates:
 
 ```
 ~/.claude/generated-lsp-marketplace/
@@ -215,7 +215,7 @@ When `/lsp-install:sync` runs, it creates:
 ```json
 {
   "name": "generated-lsp",
-  "owner": { "name": "lsp-install" },
+  "owner": { "name": "lspctl" },
   "metadata": {
     "description": "Auto-generated LSP plugins from lsp-config.lua",
     "pluginRoot": "./plugins"
@@ -297,10 +297,10 @@ The plugin registers the generated marketplace in Claude Code settings:
 ### Testing the Plugin
 ```bash
 # Load plugin for testing
-claude --plugin-dir /path/to/claude-lsp-install
+claude --plugin-dir /path/to/cc-lspctl
 
 # Validate plugin structure
-claude plugin validate /path/to/claude-lsp-install
+claude plugin validate /path/to/cc-lspctl
 ```
 
 ### Testing Scripts Directly

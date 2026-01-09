@@ -4,7 +4,7 @@ argument-hint: [--scope user|project|local] [--config <path>]
 allowed-tools: [Bash, Read, Write, Glob, AskUserQuestion, Skill]
 ---
 
-# LSP Install: Sync Configuration
+# lspctl: Sync Configuration
 
 Generate a Claude Code marketplace with LSP plugins from your configuration file.
 

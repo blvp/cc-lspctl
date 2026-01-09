@@ -1,6 +1,6 @@
-# lsp-install
+# cc-lspctl
 
-Mason-like LSP server management for Claude Code. Define your LSP servers in a Neovim-compatible Lua config and generate a Claude Code marketplace.
+Mason-like LSP server manager for Claude Code. Define your LSP servers in a Neovim-compatible Lua config and auto-generate Claude Code LSP plugins.
 
 ## Features
 
@@ -14,11 +14,11 @@ Mason-like LSP server management for Claude Code. Define your LSP servers in a N
 
 ```bash
 # Clone the plugin
-git clone https://github.com/blvp/claude-lsp-install.git ~/.claude/plugins/lsp-install
+git clone https://github.com/blvp/cc-lspctl.git ~/.claude/plugins/lspctl
 
 # Or add to Claude Code
-/plugin marketplace add https://github.com/blvp/claude-lsp-install
-/plugin install lsp-install
+/plugin marketplace add https://github.com/blvp/cc-lspctl
+/plugin install lspctl
 ```
 
 ## Quick Start
@@ -52,7 +52,7 @@ return {
 ### 2. Generate Marketplace
 
 ```
-/lsp-install:sync
+/lspctl:sync
 ```
 
 ### 3. Install Plugins
@@ -63,19 +63,19 @@ return {
 
 Or install all at once:
 ```
-/lsp-install:install-all
+/lspctl:install-all
 ```
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `/lsp-install:list` | Show available servers and their status |
-| `/lsp-install:sync` | Generate marketplace from config |
-| `/lsp-install:install <server>` | Install binary + plugin for a server |
-| `/lsp-install:install-all` | Install all configured servers |
-| `/lsp-install:uninstall <server>` | Uninstall server plugin and optionally binary |
-| `/lsp-install:uninstall --all` | Remove all plugins and deregister marketplace |
+| `/lspctl:list` | Show available servers and their status |
+| `/lspctl:sync` | Generate marketplace from config |
+| `/lspctl:install <server>` | Install binary + plugin for a server |
+| `/lspctl:install-all` | Install all configured servers |
+| `/lspctl:uninstall <server>` | Uninstall server plugin and optionally binary |
+| `/lspctl:uninstall --all` | Remove all plugins and deregister marketplace |
 
 ## Configuration
 
@@ -154,7 +154,7 @@ Each generated plugin contains a `.lsp.json` that Claude Code uses to configure 
 ### Check Server Status
 
 ```
-/lsp-install:list
+/lspctl:list
 ```
 
 ### Enable LSP Debug Logging

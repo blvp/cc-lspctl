@@ -80,7 +80,7 @@ def generate_marketplace_json(plugins: list[dict]) -> dict:
     return {
         "name": "generated-lsp",
         "owner": {
-            "name": "lsp-install"
+            "name": "lspctl"
         },
         "metadata": {
             "description": "Auto-generated LSP plugins from lsp-config.lua",

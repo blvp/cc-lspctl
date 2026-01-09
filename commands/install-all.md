@@ -4,7 +4,7 @@ argument-hint: [--skip-installed] [--dry-run]
 allowed-tools: [Bash, Read, AskUserQuestion]
 ---
 
-# LSP Install: Install All Servers
+# lspctl: Install All Servers
 
 Install all LSP servers defined in your `lsp-config.lua`.
 
@@ -48,14 +48,14 @@ $ARGUMENTS
 
 Before running this command:
 1. Create `~/.claude/lsp-config.lua` with your desired servers
-2. Run `/lsp-install:sync` to generate the marketplace
+2. Run `/lspctl:sync` to generate the marketplace
 
 ## Example
 
 ```
-/lsp-install:install-all
-/lsp-install:install-all --skip-installed
-/lsp-install:install-all --dry-run
+/lspctl:install-all
+/lspctl:install-all --skip-installed
+/lspctl:install-all --dry-run
 ```
 
 ## Installation Order

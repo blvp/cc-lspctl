@@ -1,16 +1,16 @@
 ---
 name: lsp-config
-description: This skill should be used when the user asks about "LSP configuration", "language server setup", "adding LSP to Claude Code", "mason config import", "lspconfig migration", "lsp-install plugin", or discusses Claude Code LSP integration and troubleshooting.
+description: This skill should be used when the user asks about "LSP configuration", "language server setup", "adding LSP to Claude Code", "mason config import", "lspconfig migration", "lspctl plugin", or discusses Claude Code LSP integration and troubleshooting.
 version: 1.0.0
 ---
 
 # LSP Configuration Skill
 
-Provides guidance for configuring Language Server Protocol (LSP) servers in Claude Code using the lsp-install plugin.
+Provides guidance for configuring Language Server Protocol (LSP) servers in Claude Code using the lspctl plugin.
 
 ## Overview
 
-The lsp-install plugin enables Mason-like LSP management for Claude Code:
+The lspctl plugin enables Mason-like LSP management for Claude Code:
 1. Define servers in a Lua config file (compatible with Neovim)
 2. Generate a marketplace with individual LSP plugins
 3. Install binaries and plugins as needed
@@ -56,7 +56,7 @@ return {
 ### 2. Generate Marketplace
 
 ```
-/lsp-install:sync
+/lspctl:sync
 ```
 
 This creates a marketplace at `~/.claude/generated-lsp-marketplace/` (or project-level).
@@ -70,19 +70,19 @@ This creates a marketplace at `~/.claude/generated-lsp-marketplace/` (or project
 
 Or install all:
 ```
-/lsp-install:install-all
+/lspctl:install-all
 ```
 
 ## Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `/lsp-install:list` | Show available servers and status |
-| `/lsp-install:sync` | Generate marketplace from config |
-| `/lsp-install:install <server>` | Install specific server |
-| `/lsp-install:install-all` | Install all configured servers |
-| `/lsp-install:uninstall <server>` | Uninstall server plugin |
-| `/lsp-install:uninstall --all` | Remove all and deregister marketplace |
+| `/lspctl:list` | Show available servers and status |
+| `/lspctl:sync` | Generate marketplace from config |
+| `/lspctl:install <server>` | Install specific server |
+| `/lspctl:install-all` | Install all configured servers |
+| `/lspctl:uninstall <server>` | Uninstall server plugin |
+| `/lspctl:uninstall --all` | Remove all and deregister marketplace |
 
 ## Supported LSP Servers
 
@@ -208,7 +208,7 @@ ts_ls = {
 
 1. Ensure marketplace was generated:
    ```
-   /lsp-install:sync
+   /lspctl:sync
    ```
 
 2. Check marketplace was added to settings:
@@ -218,9 +218,9 @@ ts_ls = {
 
 ## Migrating from Neovim
 
-Your Neovim LSP config uses lspconfig server names (e.g., `lua_ls`, `pylsp`). The lsp-install plugin uses the same naming convention.
+Your Neovim LSP config uses lspconfig server names (e.g., `lua_ls`, `pylsp`). The lspctl plugin uses the same naming convention.
 
 To migrate:
 1. Copy `ensure_installed` array from your mason-lspconfig setup
 2. Copy server settings from your `vim.lsp.config()` calls
-3. Run `/lsp-install:sync`
+3. Run `/lspctl:sync`

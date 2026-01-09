@@ -3,7 +3,7 @@ description: List available and configured LSP servers with installation status
 allowed-tools: [Bash, Read]
 ---
 
-# LSP Install: List Servers
+# lspctl: List Servers
 
 Display available LSP servers from the registry and check their installation status.
 
@@ -32,8 +32,8 @@ Display available LSP servers from the registry and check their installation sta
 After displaying the table, show:
 - Config file location (if found)
 - Commands to run:
-  - `/lsp-install:sync` to generate marketplace
-  - `/lsp-install:install <server>` to install a specific server
+  - `/lspctl:sync` to generate marketplace
+  - `/lspctl:install <server>` to install a specific server
 
 ## Available Servers in Registry
 

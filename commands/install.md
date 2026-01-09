@@ -4,7 +4,7 @@ argument-hint: <server-name> [--method npm|pip|brew|cargo|rustup|uv]
 allowed-tools: [Bash, Read, AskUserQuestion]
 ---
 
-# LSP Install: Install Server
+# lspctl: Install Server
 
 Install an LSP server binary and its Claude Code plugin.
 
@@ -38,7 +38,7 @@ $ARGUMENTS
 6. **Verify installation** - run `which <command>` again
 
 7. **Check if marketplace exists**:
-   - If not, suggest running `/lsp-install:sync` first
+   - If not, suggest running `/lspctl:sync` first
    - If yes, install the plugin: `/plugin install <plugin-name>@generated-lsp`
 
 ## Available Servers
@@ -61,9 +61,9 @@ From the registry, these servers can be installed:
 ## Example Usage
 
 ```
-/lsp-install:install pyright
-/lsp-install:install pylsp --method uv
-/lsp-install:install rust_analyzer --method rustup
+/lspctl:install pyright
+/lspctl:install pylsp --method uv
+/lspctl:install rust_analyzer --method rustup
 ```
 
 ## Notes
