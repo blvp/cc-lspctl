@@ -1,0 +1,159 @@
+{
+  "lua_ls": {
+    "pluginName": "lsp-lua",
+    "language": "lua",
+    "description": "Lua Language Server",
+    "command": "lua-language-server",
+    "args": [],
+    "extensionToLanguage": {
+      ".lua": "lua"
+    },
+    "installCommands": {
+      "brew": "brew install lua-language-server",
+      "npm": "npm install -g lua-language-server"
+    }
+  },
+  "pylsp": {
+    "pluginName": "lsp-python-pylsp",
+    "language": "python",
+    "description": "Python LSP Server (pylsp)",
+    "command": "pylsp",
+    "args": [],
+    "extensionToLanguage": {
+      ".py": "python",
+      ".pyi": "python",
+      ".pyw": "python"
+    },
+    "installCommands": {
+      "uv": "uv tool install python-lsp-server --with python-lsp-ruff --with python-lsp-isort",
+      "pipx": "pipx install python-lsp-server && pipx inject python-lsp-server python-lsp-ruff python-lsp-isort",
+      "pip": "pip install python-lsp-server python-lsp-ruff python-lsp-isort"
+    }
+  },
+  "pyright": {
+    "pluginName": "lsp-python-pyright",
+    "language": "python",
+    "description": "Pyright - Python static type checker",
+    "command": "pyright-langserver",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".py": "python",
+      ".pyi": "python"
+    },
+    "installCommands": {
+      "npm": "npm install -g pyright",
+      "pip": "pip install pyright"
+    }
+  },
+  "ts_ls": {
+    "pluginName": "lsp-typescript",
+    "language": "typescript",
+    "description": "TypeScript Language Server",
+    "command": "typescript-language-server",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".ts": "typescript",
+      ".tsx": "typescriptreact",
+      ".js": "javascript",
+      ".jsx": "javascriptreact",
+      ".mts": "typescript",
+      ".cts": "typescript",
+      ".mjs": "javascript",
+      ".cjs": "javascript"
+    },
+    "installCommands": {
+      "npm": "npm install -g typescript typescript-language-server"
+    }
+  },
+  "rust_analyzer": {
+    "pluginName": "lsp-rust",
+    "language": "rust",
+    "description": "Rust Analyzer",
+    "command": "rust-analyzer",
+    "args": [],
+    "extensionToLanguage": {
+      ".rs": "rust"
+    },
+    "installCommands": {
+      "rustup": "rustup component add rust-analyzer",
+      "brew": "brew install rust-analyzer"
+    }
+  },
+  "gopls": {
+    "pluginName": "lsp-go",
+    "language": "go",
+    "description": "Go Language Server (gopls)",
+    "command": "gopls",
+    "args": ["serve"],
+    "extensionToLanguage": {
+      ".go": "go",
+      ".mod": "gomod",
+      ".sum": "gosum"
+    },
+    "installCommands": {
+      "go": "go install golang.org/x/tools/gopls@latest"
+    }
+  },
+  "clangd": {
+    "pluginName": "lsp-cpp",
+    "language": "cpp",
+    "description": "Clang Language Server",
+    "command": "clangd",
+    "args": [],
+    "extensionToLanguage": {
+      ".c": "c",
+      ".h": "c",
+      ".cpp": "cpp",
+      ".hpp": "cpp",
+      ".cc": "cpp",
+      ".cxx": "cpp"
+    },
+    "installCommands": {
+      "brew": "brew install llvm",
+      "apt": "apt install clangd"
+    }
+  },
+  "jsonls": {
+    "pluginName": "lsp-json",
+    "language": "json",
+    "description": "JSON Language Server",
+    "command": "vscode-json-language-server",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".json": "json",
+      ".jsonc": "jsonc"
+    },
+    "installCommands": {
+      "npm": "npm install -g vscode-langservers-extracted"
+    }
+  },
+  "yamlls": {
+    "pluginName": "lsp-yaml",
+    "language": "yaml",
+    "description": "YAML Language Server",
+    "command": "yaml-language-server",
+    "args": ["--stdio"],
+    "extensionToLanguage": {
+      ".yaml": "yaml",
+      ".yml": "yaml"
+    },
+    "installCommands": {
+      "npm": "npm install -g yaml-language-server"
+    }
+  },
+  "bashls": {
+    "pluginName": "lsp-bash",
+    "language": "bash",
+    "description": "Bash Language Server",
+    "command": "bash-language-server",
+    "args": ["start"],
+    "extensionToLanguage": {
+      ".sh": "shellscript",
+      ".bash": "shellscript",
+      ".zsh": "shellscript"
+    },
+    "installCommands": {
+      "npm": "npm install -g bash-language-server"
+    }
+  }
+}

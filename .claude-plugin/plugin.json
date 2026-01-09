@@ -1,0 +1,11 @@
+{
+  "name": "lsp-install",
+  "description": "Mason-like LSP server management for Claude Code. Parse Neovim/Mason configs and generate Claude Code LSP marketplace.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Pavel Borobov",
+    "email": "pborobov@provectus.com"
+  },
+  "keywords": ["lsp", "language-server", "mason", "neovim", "development"],
+  "repository": "https://github.com/blvp/claude-lsp-install"
+}

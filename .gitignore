@@ -1,0 +1,41 @@
+# Claude Code settings (local only)
+.claude/settings.local.json
+
+# Generated marketplace (output, not source)
+generated-lsp-marketplace/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+
+# Lua
+*.luac
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Test outputs
+/tmp/
+test-*.json
+test-*.lua
