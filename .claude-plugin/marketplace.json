@@ -1,0 +1,21 @@
+{
+  "name": "lspctl",
+  "owner": {
+    "name": "Pavel Borobov",
+    "email": "pborobov@provectus.com"
+  },
+  "metadata": {
+    "description": "Mason-like LSP server manager for Claude Code. Define servers in Neovim-compatible Lua config, auto-generate Claude Code LSP plugins.",
+    "version": "1.0.0",
+    "repository": "https://github.com/blvp/cc-lspctl",
+    "keywords": ["lsp", "language-server", "mason", "neovim", "claude-code", "developer-tools"],
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "lspctl",
+      "source": "./plugins/lspctl",
+      "description": "LSP server manager commands and skills"
+    }
+  ]
+}

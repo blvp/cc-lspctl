@@ -5,7 +5,7 @@
 **Status**: MVP Complete - Ready for testing
 
 ### Completed
-- [x] Plugin structure with manifest
+- [x] Marketplace structure with manifest
 - [x] Server registry (10 LSP servers)
 - [x] Lua config parser (Neovim-compatible)
 - [x] Marketplace generator (Python)
@@ -24,9 +24,9 @@
 
 ## Project Overview
 
-A Claude Code plugin that provides Mason-like LSP server management. Users define LSP servers in a Neovim-compatible Lua config file, and the plugin generates a Claude Code marketplace with individual LSP plugins.
+A Claude Code marketplace that provides Mason-like LSP server management. Users define LSP servers in a Neovim-compatible Lua config file, and the plugin generates a Claude Code marketplace with individual LSP plugins.
 
-**Key Concept**: Claude Code requires LSP configurations to be inside plugin marketplaces. This plugin acts as a **generator** that creates a marketplace from user configuration.
+**Key Concept**: Claude Code requires LSP configurations to be inside plugin marketplaces. This marketplace contains the `lspctl` plugin which acts as a **generator** that creates additional marketplaces from user configuration.
 
 
 ## Architecture
@@ -77,21 +77,27 @@ User Config (lsp-config.lua)
 ```
 cc-lspctl/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin manifest
-├── commands/
-│   ├── sync.md                  # Main command - generates & installs everything
-│   ├── list.md                  # List available/installed servers
-│   ├── install.md               # Install single server
-│   └── install-all.md           # Install all configured servers
-├── scripts/
-│   ├── parse-lua-config.lua     # Parses Lua config, outputs JSON
-│   ├── generate-marketplace.py  # Generates marketplace structure
-│   └── check-binaries.sh        # Checks which LSP binaries are installed
-├── registry/
-│   └── servers.json             # Server definitions (lspconfig name → Claude Code format)
-├── skills/
-│   └── lsp-config/
-│       └── SKILL.md             # LSP configuration guidance skill
+│   └── marketplace.json         # Marketplace manifest
+├── plugins/
+│   └── lspctl/                  # Main lspctl plugin
+│       ├── .claude-plugin/
+│       │   └── plugin.json      # Plugin manifest
+│       ├── commands/
+│       │   ├── sync.md          # Main command - generates & installs everything
+│       │   ├── list.md          # List available/installed servers
+│       │   ├── install.md       # Install single server
+│       │   ├── install-all.md   # Install all configured servers
+│       │   └── uninstall.md     # Uninstall server(s)
+│       ├── scripts/
+│       │   ├── parse-lua-config.lua     # Parses Lua config, outputs JSON
+│       │   ├── generate-marketplace.py  # Generates marketplace structure
+│       │   └── check-binaries.sh        # Checks which LSP binaries are installed
+│       ├── registry/
+│       │   └── servers.json     # Server definitions (lspconfig name → Claude Code format)
+│       └── skills/
+│           └── lsp-config/
+│               └── SKILL.md     # LSP configuration guidance skill
+├── tests/                       # Test suite
 ├── CLAUDE.md                    # This file
 └── README.md                    # User documentation
 ```
@@ -175,7 +181,7 @@ return {
 
 ## Server Registry
 
-Located at `registry/servers.json`. Maps lspconfig names to Claude Code LSP format.
+Located at `plugins/lspctl/registry/servers.json`. Maps lspconfig names to Claude Code LSP format.
 
 ### Supported Servers
 
@@ -306,12 +312,12 @@ claude plugin validate /path/to/cc-lspctl
 ### Testing Scripts Directly
 ```bash
 # Test Lua parser
-lua scripts/parse-lua-config.lua ~/.claude/lsp-config.lua
+lua plugins/lspctl/scripts/parse-lua-config.lua ~/.claude/lsp-config.lua
 
 # Test marketplace generator
-python3 scripts/generate-marketplace.py \
-  --config <(lua scripts/parse-lua-config.lua ~/.claude/lsp-config.lua) \
-  --registry registry/servers.json \
+python3 plugins/lspctl/scripts/generate-marketplace.py \
+  --config <(lua plugins/lspctl/scripts/parse-lua-config.lua ~/.claude/lsp-config.lua) \
+  --registry plugins/lspctl/registry/servers.json \
   --scope user
 ```
 

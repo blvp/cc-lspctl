@@ -361,7 +361,7 @@ class TestMarketplaceRemove:
         return temp_dir / "marketplace"
 
     def test_remove_server_from_marketplace(
-        self, marketplace_generator, registry, temp_dir, project_root
+        self, marketplace_generator, registry, temp_dir, plugin_root
     ):
         """Test removing a single server from marketplace."""
         # Set up marketplace with multiple servers
@@ -375,7 +375,7 @@ class TestMarketplaceRemove:
         assert (marketplace_dir / "plugins" / "lsp-lua").exists()
 
         # Remove pylsp
-        registry_path = project_root / "registry" / "servers.json"
+        registry_path = plugin_root / "registry" / "servers.json"
         result = subprocess.run(
             [
                 "python3",
@@ -411,7 +411,7 @@ class TestMarketplaceRemove:
         assert "lsp-typescript" in plugin_names
 
     def test_remove_last_server_warns(
-        self, marketplace_generator, registry, temp_dir, project_root
+        self, marketplace_generator, registry, temp_dir, plugin_root
     ):
         """Test that removing the last server warns about empty marketplace."""
         # Set up marketplace with single server
@@ -420,7 +420,7 @@ class TestMarketplaceRemove:
         )
 
         # Remove the only server
-        registry_path = project_root / "registry" / "servers.json"
+        registry_path = plugin_root / "registry" / "servers.json"
         result = subprocess.run(
             [
                 "python3",
@@ -441,7 +441,7 @@ class TestMarketplaceRemove:
         assert result_data["remaining_plugins"] == []
 
     def test_remove_nonexistent_server_error(
-        self, marketplace_generator, registry, temp_dir, project_root
+        self, marketplace_generator, registry, temp_dir, plugin_root
     ):
         """Test removing a server not in the marketplace."""
         # Set up marketplace with pylsp only
@@ -450,7 +450,7 @@ class TestMarketplaceRemove:
         )
 
         # Try to remove ts_ls which isn't in the marketplace
-        registry_path = project_root / "registry" / "servers.json"
+        registry_path = plugin_root / "registry" / "servers.json"
         result = subprocess.run(
             [
                 "python3",
@@ -470,14 +470,14 @@ class TestMarketplaceRemove:
         assert "not found" in result_data["error"]
 
     def test_remove_unknown_server_error(
-        self, marketplace_generator, registry, temp_dir, project_root
+        self, marketplace_generator, registry, temp_dir, plugin_root
     ):
         """Test removing a server not in the registry."""
         marketplace_dir = self._setup_marketplace(
             marketplace_generator, registry, temp_dir, ["pylsp"]
         )
 
-        registry_path = project_root / "registry" / "servers.json"
+        registry_path = plugin_root / "registry" / "servers.json"
         result = subprocess.run(
             [
                 "python3",
@@ -518,7 +518,7 @@ class TestMarketplaceDeregister:
         return temp_dir / "marketplace", settings_path
 
     def test_deregister_removes_all(
-        self, marketplace_generator, registry, temp_dir, project_root
+        self, marketplace_generator, registry, temp_dir, plugin_root
     ):
         """Test that --deregister removes marketplace and settings."""
         marketplace_dir, settings_path = self._setup_marketplace_with_settings(

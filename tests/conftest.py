@@ -22,23 +22,29 @@ def fixtures_dir(project_root) -> Path:
 
 
 @pytest.fixture
-def registry(project_root) -> dict:
+def plugin_root(project_root) -> Path:
+    """Return the lspctl plugin directory."""
+    return project_root / "plugins" / "lspctl"
+
+
+@pytest.fixture
+def registry(plugin_root) -> dict:
     """Load the server registry."""
-    registry_path = project_root / "registry" / "servers.json"
+    registry_path = plugin_root / "registry" / "servers.json"
     with open(registry_path) as f:
         return json.load(f)
 
 
 @pytest.fixture
-def lua_parser_script(project_root) -> Path:
+def lua_parser_script(plugin_root) -> Path:
     """Return path to the Lua parser script."""
-    return project_root / "scripts" / "parse-lua-config.lua"
+    return plugin_root / "scripts" / "parse-lua-config.lua"
 
 
 @pytest.fixture
-def marketplace_generator(project_root) -> Path:
+def marketplace_generator(plugin_root) -> Path:
     """Return path to the marketplace generator script."""
-    return project_root / "scripts" / "generate-marketplace.py"
+    return plugin_root / "scripts" / "generate-marketplace.py"
 
 
 @pytest.fixture
@@ -90,11 +96,11 @@ def mock_claude_cli(mocker):
 
 
 @pytest.fixture
-def generated_marketplace(temp_dir, full_config, registry, marketplace_generator):
+def generated_marketplace(temp_dir, full_config, plugin_root, lua_parser_script, marketplace_generator):
     """Pre-generate a marketplace for testing removal operations."""
     # First parse the config
     result = subprocess.run(
-        ["lua", str(temp_dir.parent.parent / "scripts" / "parse-lua-config.lua"), str(full_config)],
+        ["lua", str(lua_parser_script), str(full_config)],
         capture_output=True,
         text=True,
         cwd=temp_dir,
@@ -109,7 +115,7 @@ def generated_marketplace(temp_dir, full_config, registry, marketplace_generator
         f.write(result.stdout)
 
     # Generate marketplace
-    registry_path = temp_dir.parent.parent / "registry" / "servers.json"
+    registry_path = plugin_root / "registry" / "servers.json"
     output_dir = temp_dir / "generated-lsp-marketplace"
 
     gen_result = subprocess.run(
